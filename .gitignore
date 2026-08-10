@@ -1,0 +1,45 @@
+# ==============================
+# DATA
+# ==============================
+
+# Raw datasets - never upload these
+data/raw/
+
+# Processed datasets - keep locally
+data/processed/
+
+
+# ==============================
+# PYTHON
+# ==============================
+
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+
+# ==============================
+# JUPYTER
+# ==============================
+
+.ipynb_checkpoints/
+
+
+# ==============================
+# VS CODE
+# ==============================
+
+.vscode/
+
+
+# ==============================
+# OPERATING SYSTEM
+# ==============================
+
+.DS_Store
+Thumbs.db
