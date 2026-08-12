@@ -1,8 +1,8 @@
 # Supply Chain Intelligence Analytics Dashboard
 
-A complete end-to-end data analytics project focused on analyzing supply chain performance, sales trends, customer behavior, product profitability, and delivery operations.
+A business intelligence and analytics project that transforms raw supply chain transaction data into actionable insights through data cleaning, exploratory analysis, KPI development, and dashboard-ready analytics datasets.
 
-The project transforms raw transactional supply chain data into clean analytical datasets and business insights that can support data-driven decision making.
+The project simulates a real-world analytics workflow used by organizations to understand revenue performance, profitability drivers, customer behavior, and operational efficiency.
 
 ---
 
@@ -20,6 +20,33 @@ Companies operating in large-scale supply chains need visibility into:
 This project analyzes historical supply chain data to identify key business drivers, operational issues, and optimization opportunities.
 
 ---
+
+# Project Philosophy
+
+This project follows a business-first analytics approach.
+
+The objective is not only to visualize historical data, but to transform raw operational data into meaningful insights that can support better business decisions.
+
+The analysis follows the principle:
+
+> Clean data → Understand performance → Identify problems → Generate insights → Support decisions
+
+Every stage of the project is designed around a real-world analytics workflow:
+
+- Data quality is treated as the foundation for reliable insights.
+- KPIs are selected based on business relevance and decision-making value.
+- Exploratory analysis focuses on discovering trends, patterns, anomalies, and opportunities.
+- Analytical outputs are structured into reusable datasets for reporting and dashboard development.
+
+The project focuses on answering practical supply chain questions:
+
+- Which products contribute the most revenue and profit?
+- Which customer segments generate the highest value?
+- How do discounts impact profitability?
+- Where are delivery and operational bottlenecks occurring?
+- What areas provide opportunities for optimization?
+
+The final goal is to convert raw supply chain transactions into actionable intelligence that enables strategic and operational decision-making.
 
 # Project Objectives
 
