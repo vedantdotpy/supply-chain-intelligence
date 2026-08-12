@@ -43,3 +43,9 @@ env/
 
 .DS_Store
 Thumbs.db
+
+# ==============================
+# ENVIRONMENT VARIABLES
+# ==============================
+
+.env
