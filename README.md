@@ -1,222 +1,299 @@
-# Supply Chain & Demand Intelligence Platform
+# Supply Chain Intelligence Analytics Dashboard
 
-An end-to-end analytics and decision-support project that analyzes supply chain operations, customer demand, logistics performance, and profitability — then converts those findings into forecasts, decision models, and business recommendations.
+A complete end-to-end data analytics project focused on analyzing supply chain performance, sales trends, customer behavior, product profitability, and delivery operations.
 
-## Business Problem
+The project transforms raw transactional supply chain data into clean analytical datasets and business insights that can support data-driven decision making.
 
-A large company is facing rising supply chain costs and recurring operational problems. Management needs answers to four questions:
+---
 
-1. What is happening?
-2. Why is it happening?
-3. What is likely to happen next?
-4. What decisions should we make about it?
+# Business Problem
 
-This project works through those four questions using a real-world supply chain dataset, moving from raw data to executive-level recommendations.
+Companies operating in large-scale supply chains need visibility into:
 
-## Objectives
+- Overall sales and profitability performance
+- Product contribution and profitability
+- Customer segment behavior
+- Geographic sales distribution
+- Delivery efficiency
+- Discount impact on profitability
 
-1. Understand and validate the dataset (structure, grain, quality)
-2. Build a reproducible data cleaning pipeline
-3. Perform exploratory data analysis (EDA)
-4. Develop business KPIs
-5. Analyze sales, profit, customers, products, geography, and shipping performance
-6. Identify inefficiencies and root causes
-7. Analyze demand trends and seasonality
-8. Forecast future demand
-9. Build decision-support and scenario models
-10. Communicate findings through an executive dashboard
-11. Produce clear, evidence-based recommendations
+This project analyzes historical supply chain data to identify key business drivers, operational issues, and optimization opportunities.
 
-## Key Business Questions
+---
 
-### Revenue & Profitability
+# Project Objectives
 
-- Which products and categories generate the most revenue?
-- Which products generate the highest profit margins?
-- Which markets and regions contribute most to profitability?
-- Are high-revenue products necessarily high-profit products?
+The main objectives of this project are:
 
-### Customer & Demand
+- Build a reliable data cleaning pipeline
+- Perform exploratory data analysis
+- Identify important business KPIs
+- Analyze product and customer performance
+- Evaluate shipping and delivery efficiency
+- Understand discount and profitability relationships
+- Prepare analytics datasets for dashboard development
 
-- Which customer segments generate the most value?
-- How does demand vary across products, regions, and time?
-- Which products exhibit stable versus volatile demand?
-- Are there identifiable seasonal demand patterns?
+---
 
-### Logistics & Delivery
+# Dataset Overview
 
-- Which shipping modes perform best?
-- Which regions experience the highest delivery risk?
-- What factors are associated with late deliveries?
-- Where should operational improvements be prioritized?
+The dataset contains transactional supply chain records including:
 
-### Decision Support
+- Orders
+- Customers
+- Products
+- Sales
+- Profit
+- Discounts
+- Shipping details
+- Delivery information
+- Geographic attributes
 
-- Where should management prioritize intervention?
-- What trade-offs exist between cost, service performance, and demand?
-- How could demand forecasting improve operational planning?
-- Which decisions could provide the greatest potential business impact?
+Dataset size after cleaning:
 
-## Project Architecture
+- Rows: 180,519
+- Columns: 53
+
+Analysis period:
+
+```
+January 2015 - January 2018
+```
+
+---
+
+# Project Architecture
 
 ```
 Raw Data
-   │
-   ▼
-Python / Pandas — validation & cleaning
-   │
-   ▼
-Feature Engineering
-   │
-   ├──► Exploratory Analysis
-   └──► Statistical Analysis
-   │
-   ▼
-SQL Analytics
-   │
-   ▼
-Demand Analysis
-   │
-   ▼
-Forecasting
-   │
-   ▼
-Decision Modeling
-   │
-   ▼
-Power BI Dashboard
-   │
-   ▼
-Business Recommendations
+    |
+    |
+    v
+Data Cleaning Pipeline
+(02_data_cleaning.ipynb)
+    |
+    |
+    v
+Clean Dataset
+    |
+    |
+    v
+Exploratory Data Analysis
+(03_exploratory_data_analysis.ipynb)
+    |
+    |
+    v
+Analytics Layer
+    |
+    |
+    v
+Dashboard Development
+(Power BI / Streamlit)
 ```
 
-## Technology Stack
+---
 
-| Layer | Tools |
-|---|---|
-| Language | Python |
-| Data manipulation | Pandas, NumPy |
-| Statistics | SciPy, Statsmodels *(planned)* |
-| Machine learning / forecasting | Scikit-learn, Statsmodels *(planned)* |
-| Database | PostgreSQL *(planned)* |
-| BI / Visualization | Power BI *(planned)* |
-| Version control | Git, GitHub |
-
-Python, Pandas, NumPy, Git, and GitHub are currently in active use. Other tools will be introduced — and added to `requirements.txt` — as the project reaches the phase that needs them.
-
-## Dataset
-
-**DataCo Smart Supply Chain for Big Data Analysis**
-
-- Source: [Mendeley Data](https://data.mendeley.com/datasets/8gx2fvg2k6/5)
-- DOI: `10.17632/8gx2fvg2k6.5`
-- Contributors: Fabian Constante, Fernando Silva, António Pereira
-- License: CC BY 4.0
-
-The dataset contains structured supply chain data (provisioning, production, sales, and commercial distribution) alongside a clickstream/access-log file capturing online customer behavior.
-
-Raw data files are **not included in this repository** due to their size (~187 MB combined). The dataset is available under the CC BY 4.0 license from the official Mendeley Data repository.
-
-1. Download the dataset from the Mendeley link above
-2. Place the files in `data/raw/`:
-   - `DataCoSupplyChainDataset.csv`
-   - `DescriptionDataCoSupplyChain.csv`
-   - `tokenized_access_logs.csv`
-
-> **Note:** Not every variable initially expected (e.g. warehouse stock levels, reorder points) is guaranteed to exist in this dataset. Any analysis relying on data not present in the source will be clearly labeled as a documented assumption or simulation, distinct from actual source data.
-
-## Repository Structure
+# Repository Structure
 
 ```
-supply-chain-intelligence/
+Supply-Chain-Intelligence
+
 │
-├── data/
-│   ├── raw/                 # Original datasets (not tracked)
-│   └── processed/           # Cleaned datasets (not tracked)
+├── data
+│   │
+│   ├── raw
+│   │
+│   ├── processed
+│   │
+│   └── analytics
+│       ├── monthly_performance.csv
+│       ├── product_performance.csv
+│       ├── customer_segment_analysis.csv
+│       ├── country_analysis.csv
+│       ├── shipping_analysis.csv
+│       └── discount_analysis.csv
 │
-├── notebooks/               # Exploratory and analytical notebooks
+├── notebooks
+│   │
+│   ├── 01_data_exploration.ipynb
+│   ├── 02_data_cleaning.ipynb
+│   └── 03_exploratory_data_analysis.ipynb
 │
-├── src/
-│   ├── data/                # Data loading and cleaning scripts
-│   ├── analysis/            # Analytical functions
-│   └── models/              # Forecasting and decision models
-│
-├── sql/                     # SQL schema and analysis queries
-│
-├── dashboard/                # Power BI dashboard files
-│
-├── reports/                  # Executive reports
-│
-├── .gitignore
-├── README.md
-└── requirements.txt
+└── README.md
 ```
 
-## Analytical Techniques
+---
 
-- Data quality assessment and validation
-- Exploratory data analysis (univariate, bivariate, multivariate)
-- KPI development (revenue, profit margin, AOV, delivery performance)
-- Customer and geographic segmentation
-- Hypothesis testing and statistical inference
-- SQL-based analytics (joins, window functions, CTEs)
-- Time series demand forecasting
-- Decision and scenario modeling (cost/service trade-offs, sensitivity analysis)
+# Technologies Used
 
-## Key Deliverables
+## Programming
 
-- Reproducible Python data-cleaning pipeline
-- Data-quality assessment
-- Exploratory data analysis
-- Business KPI framework
-- Customer, product, and geographic analysis
-- Logistics and delivery analysis
-- SQL analytical layer
-- Demand and time-series analysis
-- Demand forecasting models
-- Decision and scenario models
-- Executive Power BI dashboard
-- Executive business report
-- Evidence-based business recommendations
+- Python
 
-## Project Status
+## Data Analysis
 
-**Current phase: Project setup**
+- Pandas
+- NumPy
 
-- [x] Dataset selected and downloaded
-- [x] Project repository initialized
-- [x] Git repository created and connected to GitHub
-- [x] `.gitignore` configured to exclude raw data
-- [ ] Dataset investigation (grain, entities, data quality)
-- [ ] Data cleaning pipeline
-- [ ] Exploratory data analysis
-- [ ] Statistical analysis
-- [ ] SQL layer
-- [ ] Demand forecasting
-- [ ] Decision models
-- [ ] Power BI dashboard
-- [ ] Final executive report
+## Visualization
 
-This README will be updated as each phase is completed.
+- Matplotlib
+- Seaborn
 
-## Reproducibility
+## Development Environment
 
-```bash
-git clone https://github.com/vedantdotpy/supply-chain-intelligence.git
-cd supply-chain-intelligence
-pip install -r requirements.txt
-```
+- Jupyter Notebook
+- VS Code
 
-Then download the dataset as described above and place it in `data/raw/`.
+## Version Control
 
-## Author
+- Git
+- GitHub
 
-**Vedant Mishra**
-B.Tech, Industrial Internet of Things (IIoT) — University School of Automation and Robotics, GGSIPU, New Delhi
-GitHub: [@vedantdotpy](https://github.com/vedantdotpy)
+---
 
-## Project Philosophy
+# Key Business KPIs
 
-> **Good analytics does not end with a chart. It ends with a better decision.**
+The following KPIs were calculated:
 
-The goal of this project is to demonstrate the complete journey from raw data to actionable business intelligence — combining technical analysis, statistical reasoning, forecasting, decision-making, and clear business communication.
+| KPI | Value |
+|---|---:|
+| Gross Sales | $36.78M |
+| Net Sales | $33.05M |
+| Total Profit | $3.96M |
+| Profit Margin | 12% |
+| Orders | 65,752 |
+| Customers | 20,652 |
+| Units Sold | 384,079 |
+| Average Order Value | $502.71 |
+
+---
+
+# Key Insights
+
+## Product Performance
+
+- A small number of products contribute a majority of revenue.
+- Top 10 products contribute approximately 90% of total revenue.
+- Three products were identified with negative profitability.
+
+---
+
+## Customer Segment Analysis
+
+Customer contribution:
+
+| Segment | Revenue |
+|---|---:|
+| Consumer | $19.09M |
+| Corporate | $11.16M |
+| Home Office | $6.52M |
+
+The Consumer segment is the largest revenue contributor.
+
+---
+
+## Delivery Performance
+
+Delivery analysis revealed:
+
+- Late deliveries represent a significant operational challenge.
+- Approximately 54.83% of orders have late delivery risk.
+- Shipping mode performance varies significantly.
+
+---
+
+## Discount Analysis
+
+Analysis showed:
+
+- Increasing discounts do not necessarily increase profitability.
+- Higher discount levels generally reduce profit contribution.
+- Discount strategies should be optimized carefully.
+
+---
+
+# Analytics Datasets Generated
+
+The project produces reusable analytical datasets:
+
+### Monthly Performance
+
+Tracks:
+
+- Revenue trends
+- Profit trends
+- Orders
+- Units sold
+
+
+### Product Performance
+
+Tracks:
+
+- Revenue contribution
+- Profitability
+- Units sold
+- Product ranking
+
+
+### Customer Analysis
+
+Tracks:
+
+- Customer segments
+- Revenue contribution
+- Profit contribution
+
+
+### Geographic Analysis
+
+Tracks:
+
+- Country-level performance
+- Revenue
+- Profit
+- Orders
+
+
+### Shipping Analysis
+
+Tracks:
+
+- Delivery performance
+- Shipping mode efficiency
+- Late delivery risk
+
+
+### Discount Analysis
+
+Tracks:
+
+- Discount levels
+- Revenue impact
+- Profit impact
+
+---
+
+# Future Improvements
+
+Future development includes:
+
+- Power BI executive dashboard
+- Interactive Streamlit dashboard
+- Sales forecasting model
+- Customer segmentation using machine learning
+- Delivery delay prediction model
+
+---
+
+# Author
+
+Vedant Mishra
+
+B.Tech - Industrial Internet of Things
+
+Data Analytics | Python | SQL | Business Intelligence
+
+GitHub:
+https://github.com/vedantdotpy
