@@ -44,7 +44,7 @@ CREATE TABLE dim_shipping (
 
 
 CREATE TABLE fact_orders (
-    order_id INT PRIMARY KEY,
+    order_item_id INT PRIMARY KEY,
 
     customer_id INT,
     product_id INT,
