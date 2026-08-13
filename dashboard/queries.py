@@ -22,7 +22,7 @@ def get_kpis():
 
 # MONTHLY SALES TREND
 
-def get_monthly_sales():
+def get_monthly_sales(year=None):
 
     query = """
     SELECT
@@ -36,7 +36,15 @@ def get_monthly_sales():
 
     JOIN dim_date d
     ON f.date_id = d.date_id
+    """
 
+    if year:
+        query += f"""
+        WHERE d.year = {year}
+        """
+
+
+    query += """
     GROUP BY
         d.year,
         d.month,
@@ -46,6 +54,7 @@ def get_monthly_sales():
         d.year,
         d.month;
     """
+
 
     return pd.read_sql(query, engine)
 

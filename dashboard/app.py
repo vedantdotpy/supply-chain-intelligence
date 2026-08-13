@@ -17,7 +17,13 @@ st.set_page_config(
 
 
 st.title("Supply Chain Intelligence Dashboard")
+st.sidebar.header("Filters")
 
+
+selected_year = st.sidebar.selectbox(
+    "Select Year",
+    ["All", 2015, 2016, 2017, 2018]
+)
 
 # Load KPIs
 
@@ -65,9 +71,10 @@ with col4:
 
 st.subheader("Monthly Revenue Trend")
 
-
-monthly_sales = get_monthly_sales()
-
+if selected_year == "All":
+    monthly_sales = get_monthly_sales()
+else:
+    monthly_sales = get_monthly_sales(selected_year)
 
 monthly_sales["period"] = (
     monthly_sales["year"].astype(str)
@@ -84,61 +91,70 @@ fig = px.line(
     title="Revenue Over Time"
 )
 
+fig.update_yaxes(
+    tickformat="$,.0s"
+)
+
 
 st.plotly_chart(
     fig,
     use_container_width=True
 )
 
-# TOP PRODUCTS
+# PRODUCT + CUSTOMER ANALYSIS
 
-st.subheader("Top 10 Products by Revenue")
-
-
-top_products = get_top_products()
+col1, col2 = st.columns(2)
 
 
-fig = px.bar(
-    top_products,
+with col1:
+
+    st.subheader("Top 10 Products by Revenue")
+
+    top_products = get_top_products()
+
+
+    fig = px.bar(
+    top_products.sort_values("revenue"),
     x="revenue",
     y="product_name",
     orientation="h",
     title="Top Performing Products"
 )
+    
 
 
-st.plotly_chart(
-    fig,
-    use_container_width=True
-)
-
-# CUSTOMER SEGMENT ANALYSIS
-
-st.subheader("Revenue by Customer Segment")
+    st.plotly_chart(
+        fig,
+        width="stretch"
+    )
 
 
-customer_segments = get_customer_segments()
+
+with col2:
+
+    st.subheader("Revenue by Customer Segment")
+
+    customer_segments = get_customer_segments()
 
 
-fig = px.bar(
-    customer_segments,
-    x="segment",
-    y="revenue",
-    title="Revenue Contribution by Segment",
-    text="revenue"
-)
+    fig = px.bar(
+        customer_segments,
+        x="segment",
+        y="revenue",
+        title="Revenue Contribution by Segment",
+        text="revenue"
+    )
 
 
-fig.update_traces(
-    texttemplate="$%{text:,.0f}",
-    textposition="outside"
-)
+    fig.update_traces(
+        textposition="outside"
+    )
 
 
-st.plotly_chart(
-    fig,
-    width="stretch"
-)
+    st.plotly_chart(
+        fig,
+        width="stretch"
+    )
 
 # SHIPPING PERFORMANCE
 
