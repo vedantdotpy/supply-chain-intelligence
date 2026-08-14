@@ -18,6 +18,10 @@ DB_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 
 # Create database engine
 
+if DB_HOST is None:
+    DB_HOST = "localhost"
+
+
 connection_string = (
     f"postgresql://{DB_USER}:{DB_PASSWORD}"
     f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
@@ -26,5 +30,4 @@ connection_string = (
 
 engine = create_engine(connection_string)
 
-
-print("Dashboard database connection created")
+print("Database engine initialized")
