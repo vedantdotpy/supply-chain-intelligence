@@ -20,7 +20,7 @@ st.set_page_config(
 )
 
 
-st.title("🚚 Supply Chain Intelligence Dashboard")
+st.title("Supply Chain Intelligence Dashboard")
 
 st.sidebar.header("Filters")
 
@@ -31,10 +31,37 @@ selected_year = st.sidebar.selectbox(
 )
 
 
+selected_segment = st.sidebar.selectbox(
+    "Customer Segment",
+    [
+        "All",
+        "Consumer",
+        "Corporate",
+        "Home Office"
+    ]
+)
+
+
+selected_shipping = st.sidebar.selectbox(
+    "Shipping Mode",
+    [
+        "All",
+        "Standard Class",
+        "Second Class",
+        "First Class",
+        "Same Day"
+    ]
+)
+
+filters = {
+    "year": selected_year,
+    "segment": selected_segment,
+    "shipping_mode": selected_shipping
+}
 
 # LOAD KPIs
 
-kpi_data = get_kpis()
+kpi_data = get_kpis(filters)
 
 
 total_sales = kpi_data["total_sales"][0]
@@ -165,7 +192,6 @@ st.plotly_chart(
 
 
 # PRODUCT + CUSTOMER ANALYSIS
-
 
 col1, col2 = st.columns(2)
 

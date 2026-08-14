@@ -4,59 +4,96 @@ from database import engine
 
 # EXECUTIVE KPIs
 
-def get_kpis():
+def get_kpis(filters=None):
 
     query = """
+
     SELECT
-
         SUM(sales) AS total_sales,
-
         SUM(profit) AS total_profit,
-
         COUNT(order_item_id) AS total_orders,
 
+        ROUND(
+    CAST(SUM(sales) AS numeric)
+    /
+    NULLIF(COUNT(order_item_id),0),
+    2
+) AS average_order_value,
 
         ROUND(
-            (SUM(sales) / COUNT(order_item_id))::numeric,
-            2
-        ) AS average_order_value,
+    (
+        CAST(SUM(profit) AS numeric)
+        /
+        NULLIF(CAST(SUM(sales) AS numeric),0)
+    )
+    * 100,
+    2
+) AS profit_margin,
+
+ROUND(
+    CAST(
+        SUM(s.late_delivery_risk)
+        AS numeric
+    )
+    /
+    NULLIF(COUNT(f.order_item_id),0)
+    *100,
+    2
+) AS late_delivery_rate,
 
 
-        ROUND(
-            ((SUM(profit) / SUM(sales)) * 100)::numeric,
-            2
-        ) AS profit_margin,
-
-
-        ROUND(
-            (
-                SUM(
-                    CASE
-                        WHEN s.late_delivery_risk = 1
-                        THEN 1
-                        ELSE 0
-                    END
-                )::numeric
-                /
-                COUNT(f.order_item_id)
-            ) * 100,
-            2
-        ) AS late_delivery_rate,
-
-
-        ROUND(
-            AVG(s.actual_shipping_days)::numeric,
-            2
-        ) AS average_shipping_days
-
+ROUND(
+    CAST(
+        AVG(s.actual_shipping_days)
+        AS numeric
+    ),
+    2
+) AS average_shipping_days
 
     FROM fact_orders f
 
 
+    JOIN dim_date d
+    ON f.date_id = d.date_id
+
+
+    JOIN dim_customer c
+    ON f.customer_id = c.customer_id
+
+
     JOIN dim_shipping s
-    ON f.shipping_id = s.shipping_id;
+    ON f.shipping_id = s.shipping_id
 
     """
+
+    if filters:
+
+        conditions = []
+
+
+        if filters["year"] != "All":
+            conditions.append(
+                f"d.year = {filters['year']}"
+            )
+
+
+        if filters["segment"] != "All":
+            conditions.append(
+                f"c.segment = '{filters['segment']}'"
+            )
+
+
+        if filters["shipping_mode"] != "All":
+            conditions.append(
+                f"s.shipping_mode = '{filters['shipping_mode']}'"
+            )
+
+
+        if conditions:
+            query += (
+                " WHERE "
+                + " AND ".join(conditions)
+            )
 
 
     return pd.read_sql(query, engine)
