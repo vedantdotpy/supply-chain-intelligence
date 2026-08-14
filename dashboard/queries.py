@@ -100,7 +100,7 @@ ROUND(
 
 # MONTHLY SALES TREND
 
-def get_monthly_sales(year=None):
+def get_monthly_sales(filters=None):
 
     query = """
     SELECT
@@ -114,15 +114,47 @@ def get_monthly_sales(year=None):
 
     JOIN dim_date d
     ON f.date_id = d.date_id
+
+    JOIN dim_customer c
+    ON f.customer_id = c.customer_id
+
+    JOIN dim_shipping s
+    ON f.shipping_id = s.shipping_id
     """
 
-    if year:
-        query += f"""
-        WHERE d.year = {year}
-        """
+
+    if filters:
+
+        conditions = []
+
+
+        if filters["year"] != "All":
+            conditions.append(
+                f"d.year = {filters['year']}"
+            )
+
+
+        if filters["segment"] != "All":
+            conditions.append(
+                f"c.segment = '{filters['segment']}'"
+            )
+
+
+        if filters["shipping_mode"] != "All":
+            conditions.append(
+                f"s.shipping_mode = '{filters['shipping_mode']}'"
+            )
+
+
+        if conditions:
+            query += (
+                " WHERE "
+                + " AND ".join(conditions)
+            )
 
 
     query += """
+
     GROUP BY
         d.year,
         d.month,
@@ -131,6 +163,7 @@ def get_monthly_sales(year=None):
     ORDER BY
         d.year,
         d.month;
+
     """
 
 
@@ -138,7 +171,7 @@ def get_monthly_sales(year=None):
 
 # TOP PRODUCTS
 
-def get_top_products():
+def get_top_products(filters=None):
 
     query = """
     SELECT
@@ -151,6 +184,43 @@ def get_top_products():
     JOIN dim_product p
     ON f.product_id = p.product_id
 
+    JOIN dim_date d
+    ON f.date_id = d.date_id
+
+    JOIN dim_customer c
+    ON f.customer_id = c.customer_id
+
+    JOIN dim_shipping s
+    ON f.shipping_id = s.shipping_id
+    """
+
+    if filters:
+
+        conditions = []
+
+        if filters["year"] != "All":
+            conditions.append(
+                f"d.year = {filters['year']}"
+            )
+
+        if filters["segment"] != "All":
+            conditions.append(
+                f"c.segment = '{filters['segment']}'"
+            )
+
+        if filters["shipping_mode"] != "All":
+            conditions.append(
+                f"s.shipping_mode = '{filters['shipping_mode']}'"
+            )
+
+        if conditions:
+            query += (
+                " WHERE "
+                + " AND ".join(conditions)
+            )
+
+
+    query += """
     GROUP BY
         p.product_name
 
@@ -164,7 +234,7 @@ def get_top_products():
 
 # CUSTOMER SEGMENTS
 
-def get_customer_segments():
+def get_customer_segments(filters=None):
 
     query = """
     SELECT
@@ -178,6 +248,38 @@ def get_customer_segments():
     JOIN dim_customer c
     ON f.customer_id = c.customer_id
 
+    JOIN dim_date d
+    ON f.date_id = d.date_id
+
+    JOIN dim_shipping s
+    ON f.shipping_id = s.shipping_id
+    """
+
+
+    if filters:
+
+        conditions = []
+
+        if filters["year"] != "All":
+            conditions.append(
+                f"d.year = {filters['year']}"
+            )
+
+        if filters["segment"] != "All":
+            conditions.append(
+                f"c.segment = '{filters['segment']}'"
+            )
+
+        if filters["shipping_mode"] != "All":
+            conditions.append(
+                f"s.shipping_mode = '{filters['shipping_mode']}'"
+            )
+
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+
+
+    query += """
     GROUP BY
         c.segment
 
@@ -185,11 +287,12 @@ def get_customer_segments():
         revenue DESC;
     """
 
+
     return pd.read_sql(query, engine)
 
 # SHIPPING PERFORMANCE
 
-def get_shipping_analysis():
+def get_shipping_analysis(filters=None):
 
     query = """
     SELECT
@@ -203,6 +306,46 @@ def get_shipping_analysis():
     JOIN dim_shipping s
     ON f.shipping_id = s.shipping_id
 
+    JOIN dim_date d
+    ON f.date_id = d.date_id
+
+    JOIN dim_customer c
+    ON f.customer_id = c.customer_id
+    """
+
+
+    if filters:
+
+        conditions = []
+
+
+        if filters["year"] != "All":
+            conditions.append(
+                f"d.year = {filters['year']}"
+            )
+
+
+        if filters["segment"] != "All":
+            conditions.append(
+                f"c.segment = '{filters['segment']}'"
+            )
+
+
+        if filters["shipping_mode"] != "All":
+            conditions.append(
+                f"s.shipping_mode = '{filters['shipping_mode']}'"
+            )
+
+
+        if conditions:
+            query += (
+                " WHERE "
+                + " AND ".join(conditions)
+            )
+
+
+    query += """
+
     GROUP BY
         s.shipping_mode
 
@@ -210,11 +353,12 @@ def get_shipping_analysis():
         late_orders DESC;
     """
 
+
     return pd.read_sql(query, engine)
 
 # PROFITABILITY BY CATEGORY
 
-def get_profit_by_category():
+def get_profit_by_category(filters=None):
 
     query = """
     SELECT
@@ -239,6 +383,51 @@ def get_profit_by_category():
     ON f.product_id = p.product_id
 
 
+    JOIN dim_date d
+    ON f.date_id = d.date_id
+
+
+    JOIN dim_customer c
+    ON f.customer_id = c.customer_id
+
+
+    JOIN dim_shipping s
+    ON f.shipping_id = s.shipping_id
+    """
+
+
+    if filters:
+
+        conditions = []
+
+
+        if filters["year"] != "All":
+            conditions.append(
+                f"d.year = {filters['year']}"
+            )
+
+
+        if filters["segment"] != "All":
+            conditions.append(
+                f"c.segment = '{filters['segment']}'"
+            )
+
+
+        if filters["shipping_mode"] != "All":
+            conditions.append(
+                f"s.shipping_mode = '{filters['shipping_mode']}'"
+            )
+
+
+        if conditions:
+            query += (
+                " WHERE "
+                + " AND ".join(conditions)
+            )
+
+
+    query += """
+
     GROUP BY
         p.category_name
 
@@ -248,12 +437,15 @@ def get_profit_by_category():
 
 
     LIMIT 10;
+
     """
 
 
     return pd.read_sql(query, engine)
 
-def get_discount_analysis():
+# DISCOUNT IMPACT ANALYSIS
+
+def get_discount_analysis(filters=None):
 
     query = """
 
@@ -266,22 +458,66 @@ def get_discount_analysis():
             ELSE '30%+'
         END AS discount_range,
 
+
         SUM(sales) AS revenue,
 
-        ROUND(
-    CAST(
+
         (
             SUM(profit)::numeric
             /
             NULLIF(SUM(sales)::numeric,0)
-        ) * 100
-    AS numeric),
-    2
-) AS profit_margin
+            * 100
+        )::numeric(10,2) AS profit_margin
 
 
-    FROM fact_orders
+    FROM fact_orders f
 
+
+    JOIN dim_date d
+    ON f.date_id = d.date_id
+
+
+    JOIN dim_customer c
+    ON f.customer_id = c.customer_id
+
+
+    JOIN dim_shipping s
+    ON f.shipping_id = s.shipping_id
+
+    """
+
+
+    if filters:
+
+        conditions = []
+
+
+        if filters["year"] != "All":
+            conditions.append(
+                f"d.year = {filters['year']}"
+            )
+
+
+        if filters["segment"] != "All":
+            conditions.append(
+                f"c.segment = '{filters['segment']}'"
+            )
+
+
+        if filters["shipping_mode"] != "All":
+            conditions.append(
+                f"s.shipping_mode = '{filters['shipping_mode']}'"
+            )
+
+
+        if conditions:
+            query += (
+                " WHERE "
+                + " AND ".join(conditions)
+            )
+
+
+    query += """
 
     GROUP BY
 
@@ -297,7 +533,6 @@ def get_discount_analysis():
         discount_range;
 
     """
-
 
     with engine.raw_connection() as connection:
 

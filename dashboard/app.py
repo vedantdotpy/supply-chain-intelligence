@@ -30,7 +30,6 @@ selected_year = st.sidebar.selectbox(
     ["All", 2015, 2016, 2017, 2018]
 )
 
-
 selected_segment = st.sidebar.selectbox(
     "Customer Segment",
     [
@@ -156,10 +155,14 @@ st.info(
 st.subheader("Monthly Revenue Trend")
 
 
-if selected_year == "All":
-    monthly_sales = get_monthly_sales()
-else:
-    monthly_sales = get_monthly_sales(selected_year)
+filters = {
+    "year": selected_year,
+    "segment": selected_segment,
+    "shipping_mode": selected_shipping
+}
+
+
+monthly_sales = get_monthly_sales(filters)
 
 
 monthly_sales["period"] = (
@@ -201,7 +204,7 @@ with col1:
 
     st.subheader("Top 10 Products by Revenue")
 
-    top_products = get_top_products()
+    top_products = get_top_products(filters)
 
 
     fig = px.bar(
@@ -224,7 +227,7 @@ with col2:
 
     st.subheader("Revenue by Customer Segment")
 
-    customer_segments = get_customer_segments()
+    customer_segments = get_customer_segments(filters)
 
 
     fig = px.bar(
@@ -254,7 +257,7 @@ with col2:
 st.subheader("Shipping Performance")
 
 
-shipping_analysis = get_shipping_analysis()
+shipping_analysis = get_shipping_analysis(filters)
 
 
 fig = px.bar(
@@ -290,7 +293,7 @@ col1, col2 = st.columns(2)
 
 with col1:
 
-    profit_category = get_profit_by_category()
+    profit_category = get_profit_by_category(filters)
 
 
     fig = px.bar(
@@ -316,7 +319,7 @@ with col1:
 
 with col2:
 
-    discount_analysis = get_discount_analysis()
+    discount_analysis = get_discount_analysis(filters)
 
 
 fig = px.bar(
