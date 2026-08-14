@@ -105,7 +105,24 @@ with col7:
         f"{average_shipping_days} days"
     )
 
+# EXECUTIVE SUMMARY
 
+st.subheader("Executive Summary")
+
+
+st.info(
+    """
+    **Business Overview**
+
+    • The supply chain generated significant revenue with consistent monthly performance.
+    
+    • Profitability analysis highlights categories with stronger margins and opportunities for optimization.
+    
+    • Shipping analysis identifies delivery risks that can impact customer satisfaction.
+    
+    • Discount analysis helps identify pricing strategies that protect profitability.
+    """
+)
 
 # MONTHLY REVENUE TREND
 
