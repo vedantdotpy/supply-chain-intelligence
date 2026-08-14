@@ -1,326 +1,400 @@
-# Supply Chain Intelligence Analytics Dashboard
+<div align="center">
 
-A business intelligence and analytics project that transforms raw supply chain transaction data into actionable insights through data cleaning, exploratory analysis, KPI development, and dashboard-ready analytics datasets.
+# 🚚 Supply Chain Intelligence Platform
 
-The project simulates a real-world analytics workflow used by organizations to understand revenue performance, profitability drivers, customer behavior, and operational efficiency.
+**A containerized, end-to-end analytics engineering platform that turns raw supply chain transactions into actionable business intelligence.**
 
----
+Built with **Python · PostgreSQL · SQL · Streamlit · Docker**
 
-# Business Problem
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=flat&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat)](#)
 
-Companies operating in large-scale supply chains need visibility into:
-
-- Overall sales and profitability performance
-- Product contribution and profitability
-- Customer segment behavior
-- Geographic sales distribution
-- Delivery efficiency
-- Discount impact on profitability
-
-This project analyzes historical supply chain data to identify key business drivers, operational issues, and optimization opportunities.
+</div>
 
 ---
 
-# Project Philosophy
+## 📖 Table of Contents
 
-This project follows a business-first analytics approach.
+- [Business Problem](#-business-problem)
+- [Project Objectives](#-project-objectives)
+- [System Architecture](#️-system-architecture)
+- [Features](#-features)
+- [Database Architecture](#️-database-architecture)
+- [Repository Structure](#-repository-structure)
+- [Dataset Overview](#-dataset-overview)
+- [Technology Stack](#️-technology-stack)
+- [Key Business KPIs](#-key-business-kpis)
+- [Key Business Insights](#-key-business-insights)
+- [Running with Docker](#-running-the-application-with-docker)
+- [Data Pipeline Workflow](#-data-pipeline-workflow)
+- [Future Improvements](#-future-improvements)
+- [Author](#-author)
 
-The objective is not only to visualize historical data, but to transform raw operational data into meaningful insights that can support better business decisions.
+---
 
-The analysis follows the principle:
+## 📌 Business Problem
 
-> Clean data → Understand performance → Identify problems → Generate insights → Support decisions
+Large-scale supply chain operations generate massive amounts of transactional data. Without proper analytics infrastructure, organizations struggle to answer important business questions:
 
-Every stage of the project is designed around a real-world analytics workflow:
-
-- Data quality is treated as the foundation for reliable insights.
-- KPIs are selected based on business relevance and decision-making value.
-- Exploratory analysis focuses on discovering trends, patterns, anomalies, and opportunities.
-- Analytical outputs are structured into reusable datasets for reporting and dashboard development.
-
-The project focuses on answering practical supply chain questions:
-
-- Which products contribute the most revenue and profit?
-- Which customer segments generate the highest value?
+- Which products generate the highest revenue?
+- Which categories are the most profitable?
+- Which customer segments contribute the most value?
 - How do discounts impact profitability?
-- Where are delivery and operational bottlenecks occurring?
-- What areas provide opportunities for optimization?
+- Where are shipping delays occurring?
+- What operational areas require optimization?
 
-The final goal is to convert raw supply chain transactions into actionable intelligence that enables strategic and operational decision-making.
-
-# Project Objectives
-
-The main objectives of this project are:
-
-- Build a reliable data cleaning pipeline
-- Perform exploratory data analysis
-- Identify important business KPIs
-- Analyze product and customer performance
-- Evaluate shipping and delivery efficiency
-- Understand discount and profitability relationships
-- Prepare analytics datasets for dashboard development
+This project builds an analytics platform that converts raw operational data into meaningful insights for strategic and operational decision-making.
 
 ---
 
-# Dataset Overview
+## 🎯 Project Objectives
 
-The dataset contains transactional supply chain records including:
+| # | Objective |
+|---|---|
+| 1 | Build a reliable data processing pipeline |
+| 2 | Clean and transform raw supply chain data |
+| 3 | Design a relational analytical database |
+| 4 | Implement a star schema data warehouse |
+| 5 | Create reusable SQL analytics queries |
+| 6 | Develop an interactive business intelligence dashboard |
+| 7 | Containerize the complete application using Docker |
 
-- Orders
-- Customers
-- Products
-- Sales
-- Profit
-- Discounts
-- Shipping details
-- Delivery information
-- Geographic attributes
+---
 
-Dataset size after cleaning:
+## 🏗️ System Architecture
 
-- Rows: 180,519
-- Columns: 53
+```mermaid
+flowchart TD
+    A[🐳 Docker Compose] --> B[Raw Supply Chain Dataset]
+    B --> C[Python ETL Pipeline<br/>Pandas Transformation]
+    C --> D[(PostgreSQL Data Warehouse)]
+    D --> E[Star Schema Model]
 
-Analysis period:
+    E --> F[dim_customer]
+    E --> G[dim_product]
+    E --> H[dim_date]
+    E --> I[dim_shipping]
 
-```
-January 2015 - January 2018
+    F & G & H & I --> J[fact_orders]
+    J --> K[SQL Analytics Layer]
+    K --> L[📊 Streamlit Intelligence Dashboard]
 ```
 
 ---
 
-# Project Architecture
+## 🚀 Features
 
-```
-Raw Data
-    |
-    |
-    v
-Data Cleaning Pipeline
-(02_data_cleaning.ipynb)
-    |
-    |
-    v
-Clean Dataset
-    |
-    |
-    v
-Exploratory Data Analysis
-(03_exploratory_data_analysis.ipynb)
-    |
-    |
-    v
-Analytics Layer
-    |
-    |
-    v
-Dashboard Development
-(Power BI / Streamlit)
-```
+### 🔧 Data Engineering
+- Automated ETL pipeline
+- Data cleaning and transformation
+- Duplicate handling
+- Data validation checks
+- Star schema implementation
+- PostgreSQL data warehouse
+
+### 📐 Analytics Engineering
+- SQL-based KPI calculations
+- Revenue analysis
+- Profitability analysis
+- Product performance analysis
+- Customer segmentation analysis
+- Shipping performance analysis
+- Discount impact analysis
+
+### 📊 Dashboard
+Interactive Streamlit dashboard containing:
+
+- Executive KPI overview
+- Revenue trends
+- Product performance analysis
+- Customer segment analysis
+- Shipping analytics
+- Profitability insights
+- Discount optimization analysis
+- Dynamic filtering by **Year**, **Customer Segment**, and **Shipping Mode**
 
 ---
 
-# Repository Structure
+## 🗄️ Database Architecture
+
+The project uses a **PostgreSQL star schema** design.
+
+```mermaid
+erDiagram
+    dim_customer ||--o{ fact_orders : places
+    dim_product  ||--o{ fact_orders : contains
+    dim_date     ||--o{ fact_orders : occurs_on
+    dim_shipping ||--o{ fact_orders : fulfilled_by
+
+    dim_customer {
+        string location
+        string segment
+        string geographic_attributes
+    }
+    dim_product {
+        string product_name
+        string category
+        string department
+        float pricing
+    }
+    dim_date {
+        date full_date
+        int month
+        int quarter
+        int year
+    }
+    dim_shipping {
+        string shipping_mode
+        string delivery_status
+        int actual_shipping_days
+        int scheduled_shipping_days
+        string late_delivery_risk
+    }
+    fact_orders {
+        float sales
+        float profit
+        int quantity
+        float discount
+        int customer_id_fk
+        int product_id_fk
+        date date_fk
+        int shipping_id_fk
+    }
+```
+
+### Fact Table
+
+**`fact_orders`** — stores transactional order-level information:
+- Sales, Profit, Quantity, Discount
+- Customer, Product, Date, and Shipping references
+
+### Dimension Tables
+
+| Table | Description |
+|---|---|
+| **`dim_customer`** | Customer location, segment, and geographic attributes |
+| **`dim_product`** | Product name, category, department, and pricing |
+| **`dim_date`** | Date, month, quarter, and year for time-based analysis |
+| **`dim_shipping`** | Shipping mode, delivery status, actual vs. scheduled shipping days, and late delivery risk |
+
+---
+
+## 📂 Repository Structure
 
 ```
 Supply-Chain-Intelligence
-
+│
+├── dashboard
+│   ├── app.py
+│   ├── database.py
+│   └── queries.py
+│
+├── database
+│   ├── schema.sql
+│   └── analytics_queries.sql
 │
 ├── data
-│   │
 │   ├── raw
-│   │
 │   ├── processed
-│   │
 │   └── analytics
-│       ├── monthly_performance.csv
-│       ├── product_performance.csv
-│       ├── customer_segment_analysis.csv
-│       ├── country_analysis.csv
-│       ├── shipping_analysis.csv
-│       └── discount_analysis.csv
 │
 ├── notebooks
-│   │
-│   ├── 01_data_exploration.ipynb
+│   ├── 01_data_understanding.ipynb
 │   ├── 02_data_cleaning.ipynb
 │   └── 03_exploratory_data_analysis.ipynb
 │
+├── scripts
+│   └── load_database.py
+│
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+├── .env
 └── README.md
 ```
 
 ---
 
-# Technologies Used
+## 📊 Dataset Overview
 
-## Programming
+The dataset contains historical supply chain transactions including orders, customers, products, sales, profit, discounts, shipping information, delivery information, and geographic attributes.
 
-- Python
+<div align="center">
 
-## Data Analysis
+| Metric | Value |
+|---|---|
+| **Rows (cleaned)** | 180,519 |
+| **Analysis Period** | January 2015 – January 2018 |
 
-- Pandas
-- NumPy
-
-## Visualization
-
-- Matplotlib
-- Seaborn
-
-## Development Environment
-
-- Jupyter Notebook
-- VS Code
-
-## Version Control
-
-- Git
-- GitHub
+</div>
 
 ---
 
-# Key Business KPIs
+## 🛠️ Technology Stack
 
-The following KPIs were calculated:
+<div align="center">
 
-| KPI | Value |
-|---|---:|
-| Gross Sales | $36.78M |
-| Net Sales | $33.05M |
-| Total Profit | $3.96M |
-| Profit Margin | 12% |
-| Orders | 65,752 |
-| Customers | 20,652 |
-| Units Sold | 384,079 |
-| Average Order Value | $502.71 |
+| Category | Technologies |
+|---|---|
+| **Programming** | Python |
+| **Data Processing** | Pandas, NumPy |
+| **Database** | PostgreSQL, SQLAlchemy |
+| **Visualization** | Streamlit, Plotly, Matplotlib, Seaborn |
+| **Development** | Jupyter Notebook, VS Code |
+| **Deployment** | Docker, Docker Compose |
+| **Version Control** | Git, GitHub |
 
----
-
-# Key Insights
-
-## Product Performance
-
-- A small number of products contribute a majority of revenue.
-- Top 10 products contribute approximately 90% of total revenue.
-- Three products were identified with negative profitability.
+</div>
 
 ---
 
-## Customer Segment Analysis
+## 📈 Key Business KPIs
 
-Customer contribution:
-
-| Segment | Revenue |
-|---|---:|
-| Consumer | $19.09M |
-| Corporate | $11.16M |
-| Home Office | $6.52M |
-
-The Consumer segment is the largest revenue contributor.
-
----
-
-## Delivery Performance
-
-Delivery analysis revealed:
-
-- Late deliveries represent a significant operational challenge.
-- Approximately 54.83% of orders have late delivery risk.
-- Shipping mode performance varies significantly.
+| KPI | Description |
+|---|---|
+| **Total Sales** | Overall revenue generated |
+| **Total Profit** | Profit generated from sales |
+| **Total Orders** | Number of transactions |
+| **Average Order Value** | Revenue per order |
+| **Profit Margin** | Profitability percentage |
+| **Late Delivery Rate** | Operational delivery risk |
+| **Average Shipping Days** | Shipping efficiency |
 
 ---
 
-## Discount Analysis
+## 💡 Key Business Insights
 
-Analysis showed:
+<table>
+<tr>
+<td width="50%" valign="top">
 
-- Increasing discounts do not necessarily increase profitability.
-- Higher discount levels generally reduce profit contribution.
-- Discount strategies should be optimized carefully.
+### 📦 Product Performance
+- Revenue contribution is concentrated among top-performing products
+- Product-level profitability varies significantly
+- Certain products generate strong sales but weaker margins
 
----
+</td>
+<td width="50%" valign="top">
 
-# Analytics Datasets Generated
+### 👥 Customer Segment Analysis
+Customer segmentation helps identify:
+- Highest revenue-generating customer groups
+- Segment profitability
+- Customer contribution patterns
 
-The project produces reusable analytical datasets:
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
 
-### Monthly Performance
+### 🚢 Shipping Performance
+Shipping analysis identifies:
+- Delivery risk patterns
+- Shipping mode performance differences
+- Operational improvement opportunities
 
-Tracks:
+</td>
+<td width="50%" valign="top">
 
-- Revenue trends
-- Profit trends
-- Orders
-- Units sold
+### 💸 Discount Analysis
+Discount analysis evaluates:
+- Relationship between discounts and profitability
+- Pricing strategy effectiveness
+- Margin protection opportunities
 
-
-### Product Performance
-
-Tracks:
-
-- Revenue contribution
-- Profitability
-- Units sold
-- Product ranking
-
-
-### Customer Analysis
-
-Tracks:
-
-- Customer segments
-- Revenue contribution
-- Profit contribution
-
-
-### Geographic Analysis
-
-Tracks:
-
-- Country-level performance
-- Revenue
-- Profit
-- Orders
-
-
-### Shipping Analysis
-
-Tracks:
-
-- Delivery performance
-- Shipping mode efficiency
-- Late delivery risk
-
-
-### Discount Analysis
-
-Tracks:
-
-- Discount levels
-- Revenue impact
-- Profit impact
+</td>
+</tr>
+</table>
 
 ---
 
-# Future Improvements
+## 🐳 Running the Application with Docker
 
-Future development includes:
+### Prerequisites
 
-- Power BI executive dashboard
-- Interactive Streamlit dashboard
-- Sales forecasting model
-- Customer segmentation using machine learning
-- Delivery delay prediction model
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- Docker Compose
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/vedantdotpy/Supply-Chain-Intelligence.git
+cd Supply-Chain-Intelligence
+```
+
+### 2️⃣ Configure Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=supply_chain_db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=your_password
+```
+
+### 3️⃣ Start the Application
+
+```bash
+docker compose up --build
+```
+
+The system automatically starts:
+
+1. 🐘 PostgreSQL database container
+2. 📥 Data loader container
+3. 📊 Streamlit dashboard container
+
+The dashboard will be available at:
+
+```
+http://localhost:8501
+```
 
 ---
 
-# Author
+## 🔄 Data Pipeline Workflow
 
-Vedant Mishra
+```mermaid
+flowchart LR
+    A[CSV Dataset] --> B[Pandas ETL Pipeline]
+    B --> C[Data Validation]
+    C --> D[Dimension Table Creation]
+    D --> E[Fact Table Creation]
+    E --> F[(PostgreSQL Loading)]
+    F --> G[SQL Analytics]
+    G --> H[📊 Dashboard Visualization]
+```
 
-B.Tech - Industrial Internet of Things
+---
 
-Data Analytics | Python | SQL | Business Intelligence
+## 🔮 Future Improvements
 
-GitHub:
-https://github.com/vedantdotpy
+- ☁️ Cloud deployment using AWS/Azure
+- 🔁 CI/CD pipeline integration
+- ✅ Automated data quality monitoring
+- ⚡ Real-time data ingestion pipeline
+- 📈 Sales forecasting models
+- 🤖 Customer segmentation using machine learning
+- 🚚 Delivery delay prediction model
+- 🧠 Advanced supply chain optimization models
+
+---
+
+## 👨‍💻 Author
+
+<div align="center">
+
+**Vedant Mishra**
+
+B.Tech — Industrial Internet of Things
+
+Interested in **Data Analytics** · **Backend Engineering** · **Database Systems** · **Business Intelligence**
+
+[![GitHub](https://img.shields.io/badge/GitHub-vedantdotpy-181717?style=flat&logo=github&logoColor=white)](https://github.com/vedantdotpy)
+
+</div>
