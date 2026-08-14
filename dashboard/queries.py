@@ -12,9 +12,10 @@ def get_kpis():
         SUM(profit) AS total_profit,
         COUNT(order_item_id) AS total_orders,
         ROUND(
-            SUM(sales) / COUNT(order_item_id),
+            (SUM(sales) / COUNT(order_item_id))::numeric,
             2
         ) AS average_order_value
+
     FROM fact_orders;
     """
 
