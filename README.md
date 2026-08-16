@@ -372,6 +372,50 @@ flowchart LR
 
 ---
 
+# 📸 Dashboard Preview
+
+## Executive Overview
+
+The dashboard provides an executive-level view of supply chain performance including revenue, profitability, order volume, delivery risks, and operational KPIs.
+
+![Executive Dashboard](assets/dashboard_overview.png)
+
+
+---
+
+## Revenue Performance
+
+Monthly revenue trends help identify seasonal patterns and overall business performance over time.
+
+![Monthly Revenue Trend](assets/monthly_revenue.png)
+
+
+---
+
+## Product & Customer Analytics
+
+Product contribution and customer segment analysis highlight revenue drivers and customer value distribution.
+
+![Product and Customer Analysis](assets/product_customer.png)
+
+
+---
+
+## Shipping Analytics
+
+Shipping performance analysis identifies delivery risks and operational efficiency opportunities.
+
+![Shipping Performance](assets/shipping.png)
+
+
+---
+
+## Profitability Insights
+
+Profitability analysis evaluates category margins and discount strategies to support pricing decisions.
+
+![Profitability Analysis](assets/profitability_analysis.png)
+
 ## 🔮 Future Improvements
 
 - ☁️ Cloud deployment using AWS/Azure
