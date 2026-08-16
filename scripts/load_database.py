@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 
 
 # Load environment variables
@@ -382,10 +382,29 @@ print("Final fact table cleaned")
 print(fact_df.columns.tolist())
 print(fact_df.isnull().sum())
 
-# LOAD DATA INTO POSTGRESQL
-
 print("Starting database loading...")
 
+# CLEAR EXISTING DATA
+
+with engine.begin() as connection:
+
+    connection.execute(
+        text(
+            """
+            TRUNCATE TABLE
+            fact_orders,
+            dim_customer,
+            dim_product,
+            dim_date,
+            dim_shipping
+            CASCADE;
+            """
+        )
+    )
+
+print("Existing database tables cleared")
+
+# LOAD DATA INTO POSTGRESQL
 
 customer_df.to_sql(
     "dim_customer",
