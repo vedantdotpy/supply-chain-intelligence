@@ -1,9 +1,18 @@
 import os
+import logging
 import pandas as pd
 
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 
+# Configure logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s"
+)
+
+logger = logging.getLogger(__name__)
 
 # Load environment variables
 load_dotenv()
@@ -26,7 +35,7 @@ connection_string = (
 engine = create_engine(connection_string)
 
 
-print("Database engine created successfully")
+logger.info("Database engine created successfully")
 
 # EXTRACT
 
@@ -34,9 +43,9 @@ DATA_PATH = "data/processed/supply_chain_cleaned.csv"
 
 df = pd.read_csv(DATA_PATH)
 
-print("Dataset loaded successfully")
-print("Rows:", df.shape[0])
-print("Columns:", df.shape[1])
+logger.info("Dataset loaded successfully")
+logger.info(f"Rows: {df.shape[0]}")
+logger.info(f"Columns: {df.shape[1]}")
 
 # DATA INSPECTION
 
@@ -78,13 +87,11 @@ customer_df.rename(
 )
 
 
-print("Customer dimension created")
-print(customer_df.head())
-print("Rows:", len(customer_df))
+logger.info("Customer dimension created")
+logger.info(f"Customer rows: {len(customer_df)}")
 
-print(
-    "Customer IDs unique:",
-    customer_df["customer_id"].is_unique
+logger.info(
+    f"Customer IDs unique: {customer_df['customer_id'].is_unique}"
 )
 
 # TRANSFORM PRODUCT DIMENSION
@@ -117,13 +124,11 @@ product_df.rename(
 )
 
 
-print("Product dimension created")
-print(product_df.head())
-print("Rows:", len(product_df))
+logger.info("Product dimension created")
+logger.info(f"Product rows: {len(product_df)}")
 
-print(
-    "Product IDs unique:",
-    product_df["product_id"].is_unique
+logger.info(
+    f"Product IDs unique: {product_df['product_id'].is_unique}"
 )
 
 # TRANSFORM DATE DIMENSION
@@ -188,9 +193,8 @@ date_df = date_df[
 ]
 
 
-print("Date dimension created")
-print(date_df.head())
-print("Rows:", len(date_df))
+logger.info("Date dimension created")
+logger.info(f"Date rows: {len(date_df)}")
 
 # TRANSFORM SHIPPING DIMENSION
 
@@ -238,9 +242,8 @@ shipping_df = shipping_df[
 ]
 
 
-print("Shipping dimension created")
-print(shipping_df.head())
-print("Rows:", len(shipping_df))
+logger.info("Shipping dimension created")
+logger.info(f"Shipping rows: {len(shipping_df)}")
 
 # TRANSFORM FACT TABLE
 
@@ -279,9 +282,8 @@ fact_df.rename(
 )
 
 
-print("Fact table base created")
-print(fact_df.head())
-print("Rows:", len(fact_df))
+logger.info("Fact table base created")
+logger.info(f"Fact table rows: {len(fact_df)}")
 
 # ADD DATE KEY
 
@@ -382,7 +384,7 @@ print("Final fact table cleaned")
 print(fact_df.columns.tolist())
 print(fact_df.isnull().sum())
 
-print("Starting database loading...")
+logger.info("Starting database loading...")
 
 # CLEAR EXISTING DATA
 
@@ -402,7 +404,7 @@ with engine.begin() as connection:
         )
     )
 
-print("Existing database tables cleared")
+logger.info("Existing database tables cleared")
 
 # LOAD DATA INTO POSTGRESQL
 
@@ -413,7 +415,7 @@ customer_df.to_sql(
     index=False
 )
 
-print("Loaded dim_customer")
+logger.info("Loaded dim_customer")
 
 
 product_df.to_sql(
@@ -423,7 +425,7 @@ product_df.to_sql(
     index=False
 )
 
-print("Loaded dim_product")
+logger.info("Loaded dim_product")
 
 
 date_df.to_sql(
@@ -433,7 +435,7 @@ date_df.to_sql(
     index=False
 )
 
-print("Loaded dim_date")
+logger.info("Loaded dim_date")
 
 
 shipping_df.to_sql(
@@ -443,7 +445,7 @@ shipping_df.to_sql(
     index=False
 )
 
-print("Loaded dim_shipping")
+logger.info("Loaded dim_shipping")
 
 
 fact_df.to_sql(
@@ -453,7 +455,7 @@ fact_df.to_sql(
     index=False
 )
 
-print("Loaded fact_orders")
+logger.info("Loaded fact_orders")
 
 
-print("Database loading completed successfully")
+logger.info("Database loading completed successfully")
